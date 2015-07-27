@@ -1,6 +1,7 @@
-####
-mssapi
-####
+# MSS(Meituan Storage Service) SDK for Python
+
+This is MSS SDK for Python.
+
 mssapi 1.0
 
 Released: 15-May-2015
