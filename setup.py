@@ -42,7 +42,7 @@ if sys.version_info <= (2, 5):
     sys.exit(1)
 
 def readme():
-    with open("README.rst") as f:
+    with open("README.md") as f:
         return f.read()
 
 setup(name = "mssapi",
