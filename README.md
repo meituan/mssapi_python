@@ -23,90 +23,78 @@ This is MSS SDK for python。
 
 ### create s3 connection
 
-import mssapi
-from mssapi.s3.connection import S3Connection
+    import mssapi
+    from mssapi.s3.connection import S3Connection
+    from mssapi.s3.key import Key
 
-conn = S3Connection(
-    aws_access_key_id = access_key,
-    aws_secret_access_key = access_secret,
-    port = port,
-    host = host,
-)
+    conn = S3Connection(
+        aws_access_key_id = access_key,
+        aws_secret_access_key = access_secret,
+        port = port,
+        host = host,
+    )
 
 ### handle bucket
 
 #### create bucket
-conn.create_bucket('bucket_0')
-
-conn.create_bucket('bucket_1')
+    b0=conn.create_bucket('tmpbucket0')
+    b1=conn.create_bucket('tmpbucket1')
 
 #### get buckets
-bs = conn.get_all_buckets()
-
-for b in bs:
-
->    print b.name
+    bs = conn.get_all_buckets()
+    for b in bs:
+        print b.name
 
 #### get bucket
-b1 = conn.get_bucket('bucket_1')
+    b1 = conn.get_bucket('tmpbucket1')
 
 #### delete bucket
-conn.delete_bucket(b1)
+    conn.delete_bucket(b1)
 
 #### head bucket
-conn.head_bucket('bucket_1')
+    conn.head_bucket('tmpbucket0')
 
 #### bucket in
-'bucket_2' in conn
+    'tmpbucket0' in conn
 
 #### get bucket keys
-keys = b2.get_all_keys()
-
-for k in keys:
-
->    print k.name
+    keys = b0.get_all_keys()
+    for k in keys:
+        print k.name
 
 ### handle key
-
-bucket = conn.get_bucket('bucket_1')
+    bucket = conn.get_bucket('tmpbucket0')
 
 #### create key
-k0 = bucket.new_key('key_0')
+    k0 = bucket.new_key('key0')
+    k0.set_contents_from_string('hello key0')
 
-k0.set_contents_from_string('hello key0')
-
-k1 = Key(bucket, 'key_1')
-
-k1.set_contents_from_filename('file_w1')
+    k1 = Key(bucket, 'key1')
+    k1.set_contents_from_filename('file_w1')
 
 #### get key
-k0 = bucket.get_key('key_0')
+    k0 = bucket.get_key('key0')
+    cont =  k0.get_contents_as_string()
 
-cont =  k1.get_contents_as_string()
-
-k2 = Key(bucket, 'key_1')
-
-k2.get_contents_to_filename('file_r1')
+    k1 = Key(bucket, 'key1')
+    k1.get_contents_to_filename('file_r1')
 
 #### delete key
-bucket.delete_key('key_0')
+    bucket.delete_key('key0')
 
 #### lookup key
-bucket.lookup('key_0')
+    bucket.lookup('key0')
+
+#### tmp url
+    k1.generate_url(expires_in = 300)
 
 ### handle multipart
+    first you need to init chunk_path and chunk_num
 
-first you need to init chunk_path and chunk_num
+    mp = bucket.initiate_multipart_upload('multipartkey')
 
-mp = bucket.initiate_multipart_upload('multipart_key')
+    for i in xrange(0, chunk_num):
+        fp = open(chunk_path + str(i), 'r' )
+        mp.upload_part_from_file(fp, part_num=i + 1)
 
-for i in xrange(0, chunk_num):
-
->    fp = open(chunk_path + str(i), 'w+' )
-
->    mp.upload_part_from_file(fp, part_num=i + 1)
-
-mp.complete_upload()
-
-
-
+    mp.complete_upload()

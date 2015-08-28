@@ -763,7 +763,7 @@ class Bucket(object):
 #==================================================================================
 
 
-    '''
+
     def cancel_multipart_upload(self, key_name, upload_id, headers=None):
         """
         To verify that all parts have been removed, so you don't get charged
@@ -780,6 +780,7 @@ class Bucket(object):
             raise self.connection.provider.storage_response_error(
                 response.status, response.reason, body)
 
+    '''
     def get_all_multipart_uploads(self, headers=None, **params):
         """
         A lower-level, version-aware method for listing active

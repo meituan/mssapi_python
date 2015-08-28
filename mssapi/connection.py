@@ -539,7 +539,6 @@ class AWSAuthConnection(object):
         if (sys.version_info[0], sys.version_info[1]) >= (2, 6):
             # If timeout isn't defined in mssapi config file, use 70 second
             # default as recommended by
-            # http://docs.aws.amazon.com/amazonswf/latest/apireference/API_PollForActivityTask.html
             self.http_connection_kwargs['timeout'] = config.getint(
                 'Mssapi', 'http_socket_timeout', 70)
 

@@ -301,7 +301,6 @@ class HmacAuthV4Handler(AuthHandler, HmacKeys):
         HmacKeys.__init__(self, host, config, provider)
         # You can set the service_name and region_name to override the
         # values which would otherwise come from the endpoint, e.g.
-        # <service>.<region>.amazonaws.com.
         self.service_name = service_name
         self.region_name = region_name
 
@@ -458,7 +457,6 @@ class HmacAuthV4Handler(AuthHandler, HmacKeys):
         scope.append(http_request.timestamp)
         # The service_name and region_name either come from:
         # * The service_name/region_name attrs or (if these values are None)
-        # * parsed from the endpoint <service>.<region>.amazonaws.com.
         region_name = self.determine_region_name(http_request.host)
         service_name = self.determine_service_name(http_request.host)
         http_request.service_name = service_name
@@ -615,18 +613,11 @@ class S3HmacAuthV4Handler(HmacAuthV4Handler, AuthHandler):
         # rest of AWS makes this hurt too.
         #
         # Possible domain formats:
-        # - s3.amazonaws.com (Classic)
-        # - s3-us-west-2.amazonaws.com (Specific region)
-        # - bukkit.s3.amazonaws.com (Vhosted Classic)
-        # - bukkit.s3-ap-northeast-1.amazonaws.com (Vhosted specific region)
-        # - s3.cn-north-1.amazonaws.com.cn - (Beijing region)
-        # - bukkit.s3.cn-north-1.amazonaws.com.cn - (Vhosted Beijing region)
         parts = self.split_host_parts(host)
 
         if self.region_name is not None:
             region_name = self.region_name
         else:
-            # Classic URLs - s3-us-west-2.amazonaws.com
             if len(parts) == 3:
                 region_name = self.clean_region_name(parts[0])
 
@@ -725,7 +716,6 @@ class S3HmacAuthV4Handler(HmacAuthV4Handler, AuthHandler):
         Presign a request using SigV4 query params. Takes in an HTTP request
         and an expiration time in seconds and returns a URL.
 
-        http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
         """
         if iso_date is None:
             iso_date = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')

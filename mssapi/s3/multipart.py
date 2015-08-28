@@ -254,7 +254,6 @@ class MultiPartUpload(object):
         return self.bucket.complete_multipart_upload(self.key_name,
                                                      self.id, xml)
 
-    '''
 
     def cancel_upload(self):
         """
@@ -293,4 +292,3 @@ class MultiPartUpload(object):
             xml.sax.parseString(body, h)
             return self._parts
 
-    '''
