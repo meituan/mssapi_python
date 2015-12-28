@@ -23,7 +23,7 @@ This is MSS SDK for python。
 ```
 
 ## Installation
-	下载MSS SDK for python包后,进入MSS SDK for python目录下，运行"sudo python setup.py install"，即可完成MSS SDK for python的安装。
+* 下载MSS SDK for python包后，进入MSS SDK for python目录下，运行"sudo python setup.py install"，即可完成MSS SDK for python的安装。
 
 ## Quick Start
 
