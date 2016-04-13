@@ -153,10 +153,10 @@ class MultiPartUpload(object):
 
     def to_xml(self):
         s = '<CompleteMultipartUpload>\n'
-        for part_num, etag in self._parts_etag.items():
+        for part in self:
             s += '  <Part>\n'
-            s += '    <PartNumber>%d</PartNumber>\n' % part_num
-            s += '    <ETag>%s</ETag>\n' % etag
+            s += '    <PartNumber>%d</PartNumber>\n' % part.part_number
+            s += '    <ETag>%s</ETag>\n' % part.etag
             s += '  </Part>\n'
         s += '</CompleteMultipartUpload>'
         return s
@@ -254,7 +254,6 @@ class MultiPartUpload(object):
         return self.bucket.complete_multipart_upload(self.key_name,
                                                      self.id, xml)
 
-    '''
 
     def cancel_upload(self):
         """
@@ -293,4 +292,3 @@ class MultiPartUpload(object):
             xml.sax.parseString(body, h)
             return self._parts
 
-    '''
