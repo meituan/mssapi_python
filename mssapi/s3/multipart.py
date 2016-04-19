@@ -153,10 +153,10 @@ class MultiPartUpload(object):
 
     def to_xml(self):
         s = '<CompleteMultipartUpload>\n'
-        for part in self:
+        for part_num, etag in self._parts_etag.items():
             s += '  <Part>\n'
-            s += '    <PartNumber>%d</PartNumber>\n' % part.part_number
-            s += '    <ETag>%s</ETag>\n' % part.etag
+            s += '    <PartNumber>%d</PartNumber>\n' % part_num
+            s += '    <ETag>%s</ETag>\n' % etag
             s += '  </Part>\n'
         s += '</CompleteMultipartUpload>'
         return s

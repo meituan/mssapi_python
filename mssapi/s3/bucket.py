@@ -758,6 +758,12 @@ class Bucket(object):
     def delete(self, headers=None):
         return self.connection.delete_bucket(self.name, headers=headers)
 
+
+#below functions not support currently
+#==================================================================================
+
+
+
     def cancel_multipart_upload(self, key_name, upload_id, headers=None):
         """
         To verify that all parts have been removed, so you don't get charged
@@ -774,6 +780,7 @@ class Bucket(object):
             raise self.connection.provider.storage_response_error(
                 response.status, response.reason, body)
 
+    '''
     def get_all_multipart_uploads(self, headers=None, **params):
         """
         A lower-level, version-aware method for listing active
@@ -879,15 +886,13 @@ class Bucket(object):
         :return: an instance of a BucketListResultSet that handles paging, etc
         """
 
+        raise NotSupportError('current not support')
+
         return MultiPartUploadListResultSet(self, key_marker,
                                             upload_id_marker,
                                             headers,
                                             encoding_type=encoding_type)
 
-
-#below functions not support currently
-#==================================================================================
-    '''
 
     def configure_website(self, suffix=None, error_key=None,
                           redirect_all_requests_to=None,
