@@ -1,6 +1,6 @@
 # MSS(Meituan Storage Service) SDK for python
 
-This is MSS SDK for python。
+This is MSS SDK for Python 2
 
 ## Introduction
 
@@ -19,88 +19,123 @@ This is MSS SDK for python。
 ### MSS访问域名
 
 ```
-  mtmss.com
+mtmss.com
 ```
 
 ## Installation
-* 下载MSS SDK for python包后，进入MSS SDK for python目录下，运行"sudo python setup.py install"，即可完成MSS SDK for python的安装。
+``` bash
+git clone https://github.com/meituan/mssapi_python.git
+cd mssapi_python
+sudo python setup.py install
+```
 
 ## Quick Start
 
-### create s3 connection
+### create S3 connection
+``` Python
+import mssapi
+from mssapi.s3.connection import S3Connection
+from mssapi.s3.key import Key
 
-    import mssapi
-    from mssapi.s3.connection import S3Connection
-    from mssapi.s3.key import Key
-
-    conn = S3Connection(
-        aws_access_key_id = access_key,
-        aws_secret_access_key = access_secret,
-        port = port,
-        host = host,
-    )
+conn = S3Connection(
+    aws_access_key_id = access_key,
+    aws_secret_access_key = access_secret,
+    port = port,
+    host = host,
+)
+```
 
 ### handle bucket
 
 #### create bucket
-    b0=conn.create_bucket('tmpbucket0')
-    b1=conn.create_bucket('tmpbucket1')
+``` Python
+b0=conn.create_bucket('tmpbucket0')
+b1=conn.create_bucket('tmpbucket1')
+```
 
 #### get buckets
-    bs = conn.get_all_buckets()
-    for b in bs:
-        print b.name
+``` Python
+bs = conn.get_all_buckets()
+for b in bs:
+    print b.name
+```
 
 #### get bucket
-    b1 = conn.get_bucket('tmpbucket1')
+``` Python
+b1 = conn.get_bucket('tmpbucket1')
+```
 
 #### delete bucket
-    conn.delete_bucket(b1)
+``` Python
+conn.delete_bucket(b1)
+```
 
 #### head bucket
-    conn.head_bucket('tmpbucket0')
+``` Python
+conn.head_bucket('tmpbucket0')
+```
 
 #### bucket in
-    'tmpbucket0' in conn
+``` Python
+'tmpbucket0' in conn
+```
 
 #### get bucket keys
-    keys = b0.get_all_keys()
-    for k in keys:
-        print k.name
+``` Python
+keys = b0.get_all_keys()
+for k in keys:
+    print k.name
+```
 
-### handle key
-    bucket = conn.get_bucket('tmpbucket0')
+### handle Object
+``` Python
+# First, you should get bucket instance
+bucket = conn.get_bucket('tmpbucket0')
+```
 
-#### create key
-    k0 = bucket.new_key('key0')
-    k0.set_contents_from_string('hello key0')
+#### create Object
+``` Python
+# Object are present as Key in following code
+k0 = bucket.new_key('key0')
+k0.set_contents_from_string('hello key0')
 
-    k1 = Key(bucket, 'key1')
-    k1.set_contents_from_filename('file_w1')
+k1 = Key(bucket, 'key1')
+k1.set_contents_from_filename('file_w1')
+```
 
-#### get key
-    k0 = bucket.get_key('key0')
-    cont =  k0.get_contents_as_string()
+#### get Object
+``` Python
+k0 = bucket.get_key('key0')
+cont =  k0.get_contents_as_string()
 
-    k1 = Key(bucket, 'key1')
-    k1.get_contents_to_filename('file_r1')
+k1 = Key(bucket, 'key1')
+k1.get_contents_to_filename('file_r1')
+```
 
-#### delete key
-    bucket.delete_key('key0')
+#### delete Object
+``` Python
+bucket.delete_key('key0')
+```
 
-#### lookup key
-    bucket.lookup('key0')
+#### lookup Object
+``` Python
+bucket.lookup('key0')
+```
 
-#### tmp url
-    k1.generate_url(expires_in = 300)
+#### generate temporary url
+``` Python
+k1.generate_url(expires_in = 300)
+```
 
 ### handle multipart
-    first you need to init chunk_path and chunk_num
+``` Python
+# First, you need to init chunk_path and chunk_num
 
-    mp = bucket.initiate_multipart_upload('multipartkey')
+mp = bucket.initiate_multipart_upload('multipartkey')
 
-    for i in xrange(0, chunk_num):
-        fp = open(chunk_path + str(i), 'r' )
-        mp.upload_part_from_file(fp, part_num=i + 1)
+for i in xrange(0, chunk_num):
+    fp = open(chunk_path + str(i), 'r' )
+    mp.upload_part_from_file(fp, part_num=i + 1)
 
-    mp.complete_upload()
+mp.complete_upload()
+```
